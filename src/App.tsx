@@ -3,6 +3,8 @@ import './App.css';
 import {TasksType, Todolist} from "./Todolist";
 import {v1} from 'uuid';
 import {AddItemForm} from "./components/AddItemForm";
+import ButtonAppBar from "./components/Header";
+import {Container, Grid, Paper} from "@mui/material";
 
 export type FilterValueType = "all" | "active" | "completed"
 type TodolistsType = {
@@ -87,32 +89,41 @@ function App() {
 
     return (
         <div className="App">
-            <AddItemForm callBack={addTodoList}/>
-            {todolists.map(el => {
-                let currentFilterValue = tasks[el.id];
-                if (el.filter === "completed") {
-                    currentFilterValue = tasks[el.id].filter(el => el.isDone)
-                }
-                if (el.filter === "active") {
-                    currentFilterValue = tasks[el.id].filter(el => !el.isDone)
-                }
-                return (
-                    <Todolist
-                        key={el.id}
-                        todoListID={el.id}
-                        title={el.title}
-                        tasks={currentFilterValue}
-                        removeTask={removeTask}
-                        changeFilterValue={changeFilterValue}
-                        addTask={addTask}
-                        changeCheckbox={changeCheckbox}
-                        filter={el.filter}
-                        removeTodoList={removeTodoList}
-                        updateTodoList={updateTodoList}
-                        updateTask={updateTask}
-                    />
-                )
-            })}
+            <ButtonAppBar/>
+            <Container fixed>
+                <Grid container style={{padding: "20px"}}>
+                    <AddItemForm callBack={addTodoList}/>
+                </Grid>
+                <Grid container spacing={3}>
+                    {todolists.map(el => {
+                        let currentFilterValue = tasks[el.id];
+                        if (el.filter === "completed") {
+                            currentFilterValue = tasks[el.id].filter(el => el.isDone)
+                        }
+                        if (el.filter === "active") {
+                            currentFilterValue = tasks[el.id].filter(el => !el.isDone)
+                        }
+                        return <Grid item>
+                            <Paper style={{padding: "10px"}}>
+                                <Todolist
+                                    key={el.id}
+                                    todoListID={el.id}
+                                    title={el.title}
+                                    tasks={currentFilterValue}
+                                    removeTask={removeTask}
+                                    changeFilterValue={changeFilterValue}
+                                    addTask={addTask}
+                                    changeCheckbox={changeCheckbox}
+                                    filter={el.filter}
+                                    removeTodoList={removeTodoList}
+                                    updateTodoList={updateTodoList}
+                                    updateTask={updateTask}
+                                />
+                            </Paper>
+                        </Grid>
+                    })}
+                </Grid>
+            </Container>
         </div>
     );
 }
