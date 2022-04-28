@@ -3,8 +3,8 @@ import {v1} from "uuid";
 
 type TodolistReducerType = RemoveTodolistACType | AddTodoListACType | UpdateTodoListACType | ChangeFilterValueACType
 
-type RemoveTodolistACType = ReturnType<typeof removeTodolistAC>
-type AddTodoListACType = ReturnType<typeof addTodoListAC>
+export type RemoveTodolistACType = ReturnType<typeof removeTodolistAC>
+export type AddTodoListACType = ReturnType<typeof addTodoListAC>
 type UpdateTodoListACType = ReturnType<typeof updateTodoListAC>
 type ChangeFilterValueACType = ReturnType<typeof changeFilterValueAC>
 
@@ -18,7 +18,8 @@ export const removeTodolistAC = (todolistID: string) => {
 export const addTodoListAC = (title: string) => {
     return{
         type: 'ADD-TODOLIST',
-        title
+        title,
+        todolistID: v1()
     }as const
 }
 
@@ -47,8 +48,8 @@ export const todolistsReducer = (state: TodolistType[], action: TodolistReducerT
             return state.filter(el=> el.id !== action.todolistID)
         case 'ADD-TODOLIST':
             let newID = v1();
-            let newTodoList: TodolistType = {id: newID, title: action.title, filter: "all"}
-            return [{id: newID, title: action.title, filter: "all"}, ...state]
+            //let newTodoList: TodolistType = {id: newID, title: action.title, filter: "all"}
+            return [{id: action.todolistID, title: action.title, filter: "all"}, ...state]
         case 'CHANGE-TODOLIST-TITLE':
             return state.map(el=>el.id === action.payload.todolistID
             ? {...el, title: action.payload.title}
