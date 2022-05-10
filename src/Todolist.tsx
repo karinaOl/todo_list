@@ -1,9 +1,9 @@
 import React from "react";
-import {FilterValueType} from "./App";
 import {AddItemForm} from "./components/AddItemForm";
 import {EditableSpan} from "./components/EditableSpan";
 import {Button, Checkbox, IconButton} from "@mui/material";
 import {Delete} from "@mui/icons-material";
+import { FilterValueType } from "./AppWithRedux";
 
 export type TasksType = {
     id: string
@@ -15,14 +15,14 @@ type TodolistType = {
     todoListID: string
     title: string
     tasks: TasksType[]
-    removeTask: (todoListID: string, taskID: string) => void
+    removeTask: (taskID: string, todolistID: string) => void
     changeFilterValue: (todoListID: string, filter: FilterValueType) => void
-    addTask: (todoListID: string, title: string) => void
-    changeCheckbox: (todoListID: string, taskID: string, isDone:boolean)=>void
+    addTask: (title:string, todolistID: string) => void
+    changeCheckbox: (taskID: string, isDone: boolean, todolistID: string)=>void
     filter: FilterValueType
     removeTodoList: (todoListID: string)=>void
     updateTodoList: (todoListID: string, newTitle:string)=>void
-    updateTask: (todoListID: string, taskID: string, newTitle:string)=>void
+    updateTask: (taskID: string, title: string, todolistID: string)=>void
 }
 
 export const Todolist = (props: TodolistType) => {
@@ -32,11 +32,11 @@ export const Todolist = (props: TodolistType) => {
     }
 
     const addTask = (title:string) => {
-        props.addTask(props.todoListID, title)
+        props.addTask(title, props.todoListID)
     }
 
     const changeStatusHandler = (taskID: string, isDone:boolean) => {
-      props.changeCheckbox(props.todoListID,taskID, isDone)
+      props.changeCheckbox(taskID, isDone, props.todoListID)
     }
 
     const changeTodolistTitleHandler = (newTitle: string) => {
@@ -44,7 +44,7 @@ export const Todolist = (props: TodolistType) => {
     }
 
     const changeTaskTitleHandler = (taskID:string, newTitle: string) => {
-      props.updateTask(props.todoListID,taskID,newTitle)
+      props.updateTask(taskID,newTitle, props.todoListID)
     }
 
     const onClickChangeFilterHandlerAll = () => {
@@ -69,17 +69,13 @@ export const Todolist = (props: TodolistType) => {
             <ul>
                 {props.tasks.map(el => {
                     const onClickRemoveTaskHandler = () => {
-                        props.removeTask(props.todoListID, el.id)
+                        props.removeTask(el.id, props.todoListID)
                     }
                     return (
                         <li key={el.id}>
                             <Checkbox color="secondary"
                                       checked={el.isDone}
                                       onChange={(e)=>changeStatusHandler(el.id,e.currentTarget.checked)}/>
-                           {/* <input
-                                type="checkbox"
-                                checked={el.isDone}
-                                onChange={(e)=>changeStatusHandler(el.id,e.currentTarget.checked)}/>*/}
                             <EditableSpan title={el.title} callBack={(newTitle)=>changeTaskTitleHandler(el.id,newTitle)}/>
                             <IconButton aria-label="delete" onClick={onClickRemoveTaskHandler}>
                                 <Delete />
