@@ -5,27 +5,29 @@ type AddItemFormType = {
     callBack: (title: string) => void
 }
 
-export const AddItemForm = (props: AddItemFormType) => {
+export const AddItemForm = React.memo((props: AddItemFormType) => {
 
-    const [title, setTitle] = useState('')
-    const [error, setError] = useState<boolean>(false)
+    const [title, setTitle] = useState("")
+    const [error, setError] = useState<string | null>(null)
     const onClickAddTaskHandler = () => {
         if (title.trim() !== '') {
             props.callBack(title)
         } else {
-            setError(true)
+            setError("Title is required")
         }
-        setTitle('')
+        setTitle("")
     }
 
     const onKeyPressInputHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        if(error !== null){
+            setError(null)
+        }
         if (e.key === "Enter") {
             onClickAddTaskHandler()
         }
     }
 
     const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setError(false)
         setTitle(e.currentTarget.value)
     }
     return (
@@ -38,7 +40,7 @@ export const AddItemForm = (props: AddItemFormType) => {
                        onChange={onChangeInputHandler}
                        onKeyPress={onKeyPressInputHandler}
                        size={"small"}
-                       error={error}/>
+                       error={!!error}/>
             <Button variant="contained"
                     onClick={onClickAddTaskHandler}
                     style={{
@@ -52,4 +54,4 @@ export const AddItemForm = (props: AddItemFormType) => {
             {error && <div className={'errorMessage'}>{error}</div>}
         </div>
     )
-}
+})
