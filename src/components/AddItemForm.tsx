@@ -1,5 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
-import {Button, TextField} from "@mui/material";
+import {Button, IconButton, TextField} from "@mui/material";
+import {AddCircleOutline} from "@mui/icons-material";
 
 type AddItemFormType = {
     callBack: (title: string) => void
@@ -41,7 +42,7 @@ export const AddItemForm = React.memo((props: AddItemFormType) => {
                        onKeyPress={onKeyPressInputHandler}
                        size={"small"}
                        error={!!error}/>
-            <Button variant="contained"
+            {/*<Button variant="contained"
                     onClick={onClickAddTaskHandler}
                     style={{
                         maxWidth: "39px",
@@ -50,7 +51,10 @@ export const AddItemForm = React.memo((props: AddItemFormType) => {
                         minHeight: "39px",
                         backgroundColor: "violet"
                     }}
-            >+</Button>
+            >+</Button>*/}
+            <IconButton onClick={onClickAddTaskHandler} color={"primary"}>
+                <AddCircleOutline/>
+            </IconButton>
             {error && <div className={'errorMessage'}>{error}</div>}
         </div>
     )
