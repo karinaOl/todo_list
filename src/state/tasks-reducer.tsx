@@ -1,6 +1,7 @@
 import {v1} from "uuid";
 import {AddTodoListACType, RemoveTodolistACType} from "./todolists-reducer";
 import {TasksStateType} from "../AppWithRedux";
+import {TaskPriorities, TaskStatuses} from "../api/todoist-api";
 
 type RemoveTaskType = ReturnType<typeof removeTaskAC>
 type AddTaskType = ReturnType<typeof addTaskAC>
@@ -26,11 +27,11 @@ export const addTaskAC = (title:string, todolistID: string) =>{
     }as const
 }
 
-export const changeTaskStatusAC = (taskID: string, isDone: boolean, todolistID: string) => {
+export const changeTaskStatusAC = (taskID: string, status: TaskStatuses, todolistID: string) => {
   return{
       type: "CHANGE-TASK-STATUS",
       taskID,
-      isDone,
+      status,
       todolistID
   }as const
 }
@@ -56,12 +57,23 @@ export const tasksReducer = (state= initialState, action: ActionType) : TasksSta
         case "ADD-TASK":
             return {
                 ...state,
-                [action.todolistID]:[{id: v1(), title: action.title, isDone: false}, ...state[action.todolistID]]
+                [action.todolistID]:[{
+                    id: v1(),
+                    title: action.title,
+                    status: TaskStatuses.New,
+                    todoListId: action.todolistID,
+                    startDate: "",
+                    deadline: "",
+                    addedDate: "",
+                    order: 0,
+                    priority: TaskPriorities.Low,
+                    description:""
+                }, ...state[action.todolistID]]
             }
         case "CHANGE-TASK-STATUS":
             return {
                 ...state,
-                [action.todolistID]:state[action.todolistID].map(el=> el.id === action.taskID ? {...el, isDone: action.isDone} : el)
+                [action.todolistID]:state[action.todolistID].map(el=> el.id === action.taskID ? {...el, status: action.status} : el)
             }
         case "CHANGE-TASK-TITLE":
             return {
