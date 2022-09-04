@@ -1,7 +1,7 @@
 import {ComponentMeta, ComponentStory} from "@storybook/react";
 import {Task} from "./Task";
 import {action} from "@storybook/addon-actions";
-import {TaskPriorities, TaskStatuses} from "./api/todoist-api";
+import {TaskPriorities, TaskStatuses} from "../../../../api/todoist-api";
 
 export default {
     title: "components/Task",
