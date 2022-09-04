@@ -64,7 +64,7 @@ export const UpdateTodolistTitle = () => {
     const [newTitle, setNewTitle] = useState<string>("");
 
     const updateTodoList = () => {
-        todolistsAPI.updateTodolists(todoListID, newTitle)
+        todolistsAPI.updateTodolist(todoListID, newTitle)
             .then(response => setState(response.data));
     };
 
@@ -93,7 +93,7 @@ export const GetTasksTodolists = () => {
     const [todoListID, setTodoListID] = useState<string>("");
 
     const getTasks = () => {
-        todolistsAPI.getTask(todoListID)
+        todolistsAPI.getTasks(todoListID)
             .then(response => setState(response.data));
     };
 

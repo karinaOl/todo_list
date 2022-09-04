@@ -42,17 +42,12 @@ export const AddItemForm = React.memo((props: AddItemFormType) => {
                        onKeyPress={onKeyPressInputHandler}
                        size={"small"}
                        error={!!error}/>
-            {/*<Button variant="contained"
-                    onClick={onClickAddTaskHandler}
-                    style={{
-                        maxWidth: "39px",
-                        maxHeight: "39px",
-                        minWidth: "39px",
-                        minHeight: "39px",
-                        backgroundColor: "violet"
-                    }}
-            >+</Button>*/}
-            <IconButton onClick={onClickAddTaskHandler} color={"primary"}>
+            <IconButton
+                onClick={onClickAddTaskHandler} color={"primary"}
+                style={{
+                    color: "violet"
+                }}
+            >
                 <AddCircleOutline/>
             </IconButton>
             {error && <div className={'errorMessage'}>{error}</div>}

@@ -1,18 +1,21 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import {Todolist} from "./Todolist";
 import {AddItemForm} from "./components/AddItemForm";
 import ButtonAppBar from "./components/Header";
 import {Container, Grid, Paper} from "@mui/material";
 import {
-    addTodoListAC,
-    changeFilterValueAC, FilterValueType,
-    removeTodolistAC, TodolistDomainType,
-    updateTodoListAC
+    changeFilterValueAC, createTodolistTC, FilterValueType, getTodosTC,
+    removeTodolistTC, TodolistDomainType,
+    updateTodolistTitleTC
 } from "./state/todolists-reducer";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "./state/tasks-reducer";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "./state/store";
+import {
+    addTaskTC,
+    removeTaskTC,
+    updateTaskTC
+} from "./state/tasks-reducer";
+import {useSelector} from "react-redux";
+import {AppRootStateType, useAppDispatch} from "./state/store";
 import {TaskStatuses, TaskType} from "./api/todoist-api";
 
 
@@ -22,29 +25,28 @@ export type TasksStateType = {
 
 function AppWithRedux() {
 
-    let todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists );
+    let todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists);
     let tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks);
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const removeTodoList = useCallback((todoListID: string) => {
-        let action = removeTodolistAC(todoListID);
-        dispatch(action);
+        dispatch(removeTodolistTC(todoListID));
     }, [dispatch])
 
     const removeTask = useCallback((taskID: string, todolistID: string) => {
-        dispatch(removeTaskAC(taskID, todolistID));
+        dispatch(removeTaskTC(todolistID, taskID));
     }, [dispatch])
 
-    const addTask = useCallback((title:string, todolistID: string) => {
-        dispatch(addTaskAC(title, todolistID));
+    const addTask = useCallback((title: string, todolistID: string) => {
+        dispatch(addTaskTC(todolistID, title));
     }, [dispatch])
 
     const updateTodoList = useCallback((todoListID: string, newTitle: string) => {
-        dispatch(updateTodoListAC(todoListID, newTitle));
+        dispatch(updateTodolistTitleTC(todoListID, newTitle));
     }, [dispatch])
     const updateTask = useCallback((taskID: string, title: string, todolistID: string) => {
-        dispatch(changeTaskTitleAC(taskID, title, todolistID));
+        dispatch(updateTaskTC(todolistID, taskID, {title}))
     }, [dispatch])
 
     const changeFilterValue = useCallback((todoListID: string, filter: FilterValueType) => {
@@ -52,13 +54,16 @@ function AppWithRedux() {
     }, [dispatch])
 
     const changeCheckbox = useCallback((taskID: string, status: TaskStatuses, todolistID: string) => {
-        dispatch(changeTaskStatusAC(taskID, status, todolistID));
+        dispatch(updateTaskTC(todolistID, taskID, {status}));
     }, [dispatch])
 
     const addTodoList = useCallback((title: string) => {
-        let action = addTodoListAC(title)
-        dispatch(action)
+        dispatch(createTodolistTC(title))
     }, [dispatch])
+
+    useEffect(() => {
+        dispatch(getTodosTC())
+    }, [])
 
     return (
         <div className="App">
