@@ -27,7 +27,8 @@ TaskIsDoneStory.args = {
         addedDate: "",
         order: 0,
         priority: TaskPriorities.Low,
-        description: ""
+        description: "",
+        entityStatus: "idle"
     },
     todoListID: "todoListID1"
 }
@@ -44,7 +45,8 @@ TaskIsNotDoneStory.args = {
         addedDate: "",
         order: 0,
         priority: TaskPriorities.Low,
-        description: ""
+        description: "",
+        entityStatus: "idle"
     },
     todoListID: "todoListID2"
 }

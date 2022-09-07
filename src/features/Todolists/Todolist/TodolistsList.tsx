@@ -1,13 +1,11 @@
-import {useSelector} from "react-redux";
-import {AppRootStateType, useAppDispatch} from "../../../app/store";
+import {useAppDispatch, useAppSelector} from "../../../app/store";
 import {
     changeFilterValueAC, createTodolistTC,
     FilterValueType, getTodosTC,
     removeTodolistTC,
-    TodolistDomainType,
     updateTodolistTitleTC
 } from "./todolists-reducer";
-import {addTaskTC, removeTaskTC, TasksStateType, updateTaskTC} from "./tasks-reducer";
+import {addTaskTC, removeTaskTC,updateTaskTC} from "./tasks-reducer";
 import React, {useCallback, useEffect} from "react";
 import {TaskStatuses} from "../../../api/todoist-api";
 import {Grid, Paper} from "@mui/material";
@@ -15,8 +13,8 @@ import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
 import {Todolist} from "./Todolist";
 
 export const Todolists = () => {
-    let todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists);
-    let tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks);
+    let todolists = useAppSelector(state => state.todolists);
+    let tasks = useAppSelector(state => state.tasks);
 
     const dispatch = useAppDispatch();
 
@@ -65,6 +63,7 @@ export const Todolists = () => {
                     <Paper style={{padding: "10px"}}>
                         <Todolist
                             key={el.id}
+                            entityStatus={el.entityStatus}
                             todoListID={el.id}
                             title={el.title}
                             tasks={tasks[el.id]}

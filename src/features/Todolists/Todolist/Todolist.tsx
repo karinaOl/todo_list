@@ -1,19 +1,20 @@
 import React, {useCallback, useEffect} from "react";
 import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
-import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
+import {EditableSpan} from "../../../components/EditableSpan/EditSpan";
 import {Button, IconButton} from "@mui/material";
 import {Delete} from "@mui/icons-material";
 import {Task} from "./Task/Task";
 import {TaskStatuses, TaskType} from "../../../api/todoist-api";
 import {FilterValueType} from "./todolists-reducer";
 import {useAppDispatch} from "../../../app/store";
-import {setTasksTC} from "./tasks-reducer";
+import {setTasksTC, TaskDomainType} from "./tasks-reducer";
+import {RequestStatusType} from "../../../app/app-reducer";
 
 
 type TodolistType = {
     todoListID: string
     title: string
-    tasks: TaskType[]
+    tasks: TaskDomainType[]
     removeTask: (taskID: string, todolistID: string) => void
     changeFilterValue: (todoListID: string, filter: FilterValueType) => void
     addTask: (title: string, todolistID: string) => void
@@ -22,6 +23,7 @@ type TodolistType = {
     removeTodoList: (todoListID: string) => void
     updateTodoList: (todoListID: string, newTitle: string) => void
     updateTask: (taskID: string, title: string, todolistID: string) => void
+    entityStatus: RequestStatusType
 }
 
 export const Todolist = React.memo((props: TodolistType) => {
@@ -68,12 +70,14 @@ export const Todolist = React.memo((props: TodolistType) => {
     return (
         <div>
             <h3>
-                <EditableSpan title={props.title} callBack={changeTodolistTitleHandler}/>
-                <IconButton aria-label="delete" onClick={onClickRemoveHandler}>
+                <EditableSpan disabled={props.entityStatus === "loading"} title={props.title} callBack={changeTodolistTitleHandler}/>
+                <IconButton aria-label="delete"
+                            onClick={onClickRemoveHandler}
+                            disabled={props.entityStatus === "loading"}>
                     <Delete/>
                 </IconButton>
             </h3>
-            <AddItemForm callBack={addTask}/>
+            <AddItemForm callBack={addTask} disabled={props.entityStatus === "loading"}/>
             <ul>
                 {currentFilterValue.map(el => <Task removeTask={props.removeTask}
                                              changeCheckbox={props.changeCheckbox}

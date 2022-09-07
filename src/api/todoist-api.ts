@@ -44,9 +44,9 @@ export type TodolistType = {
     title: string
 }
 
-type ResponseType<T = {}> = {
+export type ResponseType<T = {}> = {
     resultCode: number
-    messages: [],
+    messages: string[],
     data: T
 }
 

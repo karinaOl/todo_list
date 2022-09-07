@@ -4,6 +4,7 @@ import {AddCircleOutline} from "@mui/icons-material";
 
 type AddItemFormType = {
     callBack: (title: string) => void
+    disabled?: boolean
 }
 
 export const AddItemForm = React.memo((props: AddItemFormType) => {
@@ -41,7 +42,8 @@ export const AddItemForm = React.memo((props: AddItemFormType) => {
                        onChange={onChangeInputHandler}
                        onKeyPress={onKeyPressInputHandler}
                        size={"small"}
-                       error={!!error}/>
+                       error={!!error}
+                       disabled={props.disabled}/>
             <IconButton
                 onClick={onClickAddTaskHandler} color={"primary"}
                 style={{
