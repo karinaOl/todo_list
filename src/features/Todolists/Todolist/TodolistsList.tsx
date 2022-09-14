@@ -11,10 +11,12 @@ import {TaskStatuses} from "../../../api/todoist-api";
 import {Grid, Paper} from "@mui/material";
 import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
 import {Todolist} from "./Todolist";
+import {Navigate} from "react-router-dom";
 
 export const Todolists = () => {
     let todolists = useAppSelector(state => state.todolists);
     let tasks = useAppSelector(state => state.tasks);
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
 
     const dispatch = useAppDispatch();
 
@@ -50,8 +52,16 @@ export const Todolists = () => {
     }, [dispatch])
 
     useEffect(() => {
+        if(!isLoggedIn){
+            return
+        }
         dispatch(getTodosTC())
     }, [])
+
+    if(!isLoggedIn){
+        return <Navigate to={"/login"}/>
+    }
+
     return <>
         <Grid container style={{padding: "20px"}}>
             <AddItemForm callBack={addTodoList}/>
