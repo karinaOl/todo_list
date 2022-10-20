@@ -40,7 +40,7 @@ export const Todolists = () => {
     }, [dispatch])
 
     const changeFilterValue = useCallback((todoListID: string, filter: FilterValueType) => {
-        dispatch(changeFilterValueAC(todoListID, filter));
+        dispatch(changeFilterValueAC({todolistID: todoListID, filter: filter}));
     }, [dispatch])
 
     const changeCheckbox = useCallback((taskID: string, status: TaskStatuses, todolistID: string) => {

@@ -1,18 +1,19 @@
 import {AppDispatch} from "../app/store";
 import {setAppErrorAC, setAppStatusAC} from "../app/app-reducer";
 import {ResponseType} from "../api/todoist-api";
+import {Dispatch} from "redux";
 
 
-export const handleServerNetworkError   = (error: {message:string}, dispatch: AppDispatch) => {
-    dispatch(setAppErrorAC(error.message))
-    dispatch(setAppStatusAC("failed"))
+export const handleServerNetworkError   = (error: {message:string}, dispatch: Dispatch) => {
+    dispatch(setAppErrorAC({errorText: error.message ? error.message : "Some error occurred"}))
+    dispatch(setAppStatusAC({status: "failed"}))
 }
 
-export const handleServerAppError  = <T>(data: ResponseType<T>, dispatch: AppDispatch) => {
+export const handleServerAppError  = <T>(data: ResponseType<T>, dispatch: Dispatch) => {
     if (data.messages.length) {
-        dispatch(setAppErrorAC(data.messages[0]))
+        dispatch(setAppErrorAC({errorText: data.messages[0]}))
     } else {
-        dispatch(setAppErrorAC("Some error occurred"))
+        dispatch(setAppErrorAC({errorText: "Some error occurred"}))
     }
-    dispatch(setAppStatusAC("failed"))
+    dispatch(setAppStatusAC({status: "failed"}))
 }
