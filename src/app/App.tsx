@@ -10,13 +10,15 @@ import {useAppDispatch, useAppSelector} from "./store";
 import {initializeAppTC} from "./app-reducer";
 
 
-function App() {
+function App({demo = false}) {
 
     const dispatch = useAppDispatch()
     const isInitialized = useAppSelector(state => state.app.isInitialized)
 
-    useEffect(()=> {
-        dispatch(initializeAppTC())
+    useEffect(() => {
+        if (!demo) {
+            dispatch(initializeAppTC())
+        }
     })
 
     if (!isInitialized) {
@@ -34,8 +36,8 @@ function App() {
                 <Routes>
                     <Route path={"/"} element={<Todolists/>}/>
                     <Route path={"/login"} element={<Login/>}/>
-                    <Route path={"/404"} element={<h1>404: PAGE NOT FOUND</h1>} />
-                    <Route path='*' element={<Navigate to={"/404"}/>} />
+                    <Route path={"/404"} element={<h1>404: PAGE NOT FOUND</h1>}/>
+                    <Route path='*' element={<Navigate to={"/404"}/>}/>
                 </Routes>
             </Container>
         </div>
